@@ -11,13 +11,9 @@
 (defconst max-food-escrow 1000)
 (defconst max-gold-escrow 850)
 (defconst ri-treadmill-crane 54)
-;
-;
-;
-
 
 (defrule
-	(unit-type-count villager > 0)
+	(true)
 =>
 	(chat-to-all "29: I am Bigzombot")
 	(disable-self)
@@ -85,7 +81,7 @@
 (defconst infantry-line 906)    ; All infantry - swords, pikes, huskies, TKs, etc
 
 ;================= TSA ======================
-
+; from minimus
 (defrule
 	(true)
 =>
@@ -338,10 +334,6 @@
 	(set-strategic-number sn-cap-civilian-explorers 0)
 	(set-strategic-number sn-cap-civilian-builders 3)
 	(set-strategic-number sn-cap-civilian-gatherers 100)
-	(set-strategic-number sn-food-gatherer-percentage 100)
-	(set-strategic-number sn-wood-gatherer-percentage 0)
-	(set-strategic-number sn-gold-gatherer-percentage 0)
-	(set-strategic-number sn-stone-gatherer-percentage 0)
 	(disable-self)
 ) 
 
@@ -365,7 +357,7 @@
 	(build dock)
 )
 
-;Build a millcan-research
+;Build a mill
 (defrule
 	(building-type-count-total mill == 0)
 	(building-type-count-total lumber-camp > 0)
@@ -497,21 +489,18 @@
 	(can-research ri-double-bit-axe)
 =>
 	(research ri-double-bit-axe)
-	(disable-self)
 )
 
 (defrule
 	(can-research ri-bow-saw)
 =>
 	(research ri-bow-saw)
-	(disable-self)
 )
 
 (defrule
 	(can-research ri-two-man-saw)
 =>
 	(research ri-two-man-saw)
-	(disable-self)
 )
 
 (defrule
@@ -562,7 +551,7 @@
 ;========================================================================
 
 (defrule
-	(current-age == feudal-age)
+	(current-age == dark-age)
 =>
 	(set-strategic-number sn-cap-civilian-gatherers 100)
 	(set-strategic-number sn-food-gatherer-percentage 100)
@@ -603,7 +592,7 @@
 (defrule
 	(current-age == dark-age)
 	(research-completed ri-loom)
-	(civilian-population < 24)
+	(civilian-population < 22)
 	(can-train villager)
 =>
 	(train villager)
@@ -611,19 +600,19 @@
 
 (defrule
 	(current-age == dark-age)
-	(civilian-population >= 7)
+	(civilian-population >= 19)
 =>
 	(set-strategic-number sn-wood-gatherer-percentage 30)
-	(set-strategic-number sn-food-gatherer-percentage 70)
-	(set-strategic-number sn-gold-gatherer-percentage 0)
+	(set-strategic-number sn-food-gatherer-percentage 65)
+	(set-strategic-number sn-gold-gatherer-percentage 5)
 	(set-strategic-number sn-stone-gatherer-percentage 0)
 	(disable-self)
 )
 
 ;Advance to feudal age
 (defrule
-	(can-research feudal-age)
-	(civilian-population >= 24)
+	(current-age == dark-age)
+	(civilian-population >= 22)
 =>
 	(research feudal-age)
 )
@@ -642,7 +631,11 @@
 
 (defrule
 	(current-age == feudal-age)
-=>	
+=>
+	(set-strategic-number sn-wood-gatherer-percentage 45)
+	(set-strategic-number sn-food-gatherer-percentage 40)
+	(set-strategic-number sn-gold-gatherer-percentage 10)
+	(set-strategic-number sn-stone-gatherer-percentage 5)
 	(set-strategic-number sn-cap-civilian-builders 4)
 	(set-strategic-number sn-percent-civilian-gatherers 90)
 	(disable-self)
@@ -675,17 +668,6 @@
 	(research ri-wheel-barrow)
 )
 
-(defrule
-	(current-age == feudal-age)
-	(civilian-population >= 25)
-=>
-	(set-strategic-number sn-wood-gatherer-percentage 45)
-	(set-strategic-number sn-food-gatherer-percentage 40)
-	(set-strategic-number sn-gold-gatherer-percentage 10)
-	(set-strategic-number sn-stone-gatherer-percentage 5)
-	(disable-self)
-)
-
 ;feudal age market
 (defrule
 	(building-type-count-total market == 0)
@@ -710,42 +692,44 @@
 
 ;drop food if close to castle
 (defrule
-   (research-available castle-age)
-   (food-amount < 800) ;Not enough food
-   (food-amount >= 750) ;Just a bit more
-   (gold-amount >= 200) ;Enough gold, all I need is a bit of food
-   =>
-   (up-drop-resources food c: 3) ;Drop the food
+	(research-available castle-age)
+	(food-amount < 800) ;Not enough food
+	(food-amount >= 750) ;Just a bit more
+	(gold-amount >= 200) ;Enough gold, all I need is a bit of food
+=>
+	(up-drop-resources food c: 3) ;Drop the food
 )
 
 ;drop gold if close to castle-age tech
 (defrule
-   (research-available castle-age)
-   (gold-amount < 200)
-   (food-amount >= 800)
-   (gold-amount >= 150)
-   =>
-   (up-drop-resources gold c: 3) ;Drop the gold
+	(research-available castle-age)
+	(gold-amount < 200)
+	(food-amount >= 800)
+	(gold-amount >= 150)
+=>
+	(up-drop-resources gold c: 3) ;Drop the gold
 )
 
 ;Advance to castle age
 (defrule
+	(current-age == feudal-age)
 	(can-research castle-age)
-	(civilian-population >= 31)
-	(building-type-count-total market > 0)
-	(building-type-count-total blacksmith > 0)	
+	(civilian-population >= 31)	
 =>
 	(research castle-age)	
 )
 
 ;Knight blacksmith upgrades
 (defrule
+	(current-age == feudal-age)
 	(can-research ri-scale-barding)
 =>
 	(research ri-scale-barding)	
 )
 
 (defrule
+	(current-age == feudal-age)
+	(research-completed ri-scale-barding)
 	(can-research ri-forging)
 =>
 	(research ri-forging)	
@@ -753,7 +737,8 @@
 
 ;first archer range
 (defrule
-	(current-age == feudal-age)	
+	(current-age == feudal-age)
+	(building-type-count-total stable > 0)
 	(building-type-count-total archery-range == 0)	
 	(can-build archery-range)
 =>	
@@ -762,6 +747,7 @@
 
 ; Cartography should be free
 (defrule	
+	(current-age == feudal-age)
 	(players-building-count any-ally != 0)
 	(can-research ri-cartography)
 =>
@@ -792,29 +778,27 @@
 ;2 stables
 (defrule
 	(current-age == feudal-age)
-	(building-type-count-total stable < 3)
+	(building-type-count-total stable < 1)
 =>
 	(build stable)
 )
 
 (defrule
+	(current-age >= feudal-age)
 	(can-research ri-man-at-arms)
 =>
 	(research ri-man-at-arms)
 )
 
 (defrule
-	(food-amount >= 100)
+	(current-age >= feudal-age)
+	(research-completed ri-scale-barding)
 	(can-research ri-scale-mail)
 =>
 	(research ri-scale-mail)
 )
 
-(defrule
-	(can-research ri-chain-barding)
-=>
-	(research ri-chain-barding)
-)
+
 
 (defrule
 	(can-research ri-iron-casting)
@@ -837,11 +821,13 @@
 (defrule
 	(players-unit-type-count any-enemy archer-line > 6)
 	(unit-type-count-total skirmisher-line < 12)
+	(building-type-count-total archery-range <= 1)
 	
 =>
 	(train skirmisher-line)
 	(research ri-fletching)
 	(research ri-padded-archer-armor)
+	(build archery-range)
 	
 )
 
@@ -931,16 +917,16 @@
 )
 
 (defrule
-	(can-research-with-escrow ri-caravan)
-=> 
-	(release-escrow food)(release-escrow gold)
+	(can-research ri-caravan)
+	(players-building-type-count any-ally market != 0)
+=> 	
 	(research ri-caravan)
 )
 
 ; build university
 (defrule
 	(current-age >= castle-age)
-	(building-type-count-total university < 1)	
+	(building-type-count-total university == 0)	
 =>
 	(build university)
 )
@@ -948,9 +934,10 @@
 ;siege workshop
 (defrule
 	(current-age == castle-age)
-	(building-type-count-total siege-workshop < 1)
+	(building-type-count-total siege-workshop == 0)
 	(building-type-count-total university > 0)
 	(building-type-count-total castle > 0)
+	(building-type-count-total stable > 0)
 =>
 	(build siege-workshop)
 )
@@ -991,10 +978,10 @@
 	(build castle)
 )
 
-;2nd town center
+;2 more town center
 (defrule
 	(current-age >= castle-age)
-	(building-type-count-total town-center < 3)
+	(building-type-count-total town-center <= 2)
 =>
 	(build town-center)
 )
@@ -1062,11 +1049,19 @@
 	(research ri-ballistics)
 )
 
+(defrule
+	(current-age >= castle-age)
+	(unit-type-count 906 > 8)
+	(can-research ri-chain-barding)
+=>
+	(research ri-chain-barding)
+)
+
 ;if they knight rush
 (defrule
 	(current-age >= castle-age)
 	(players-unit-type-count any-enemy knight-line > 8)
-	(building-type-count-total barracks < 4)
+	(building-type-count-total barracks < 3)
 	(unit-type-count-total spearman-line < 16)
 =>	
 	(build barracks)
@@ -1077,7 +1072,7 @@
 ;start upping/training axemen if enemy has pikemen
 (defrule
 	(current-age >= castle-age)
-	(players-unit-type-count any-enemy spearman-line > 10)			
+	(players-unit-type-count any-enemy spearman-line > 10)	
 	(unit-type-count-total my-unique-unit-line < 10)
 =>	
 	(train my-unique-unit-line)
@@ -1153,6 +1148,7 @@
 )
 
 (defrule
+	(unit-type-count 906 > 8)
 	(can-research ri-chain-mail)
 =>
 	(research ri-chain-mail)
