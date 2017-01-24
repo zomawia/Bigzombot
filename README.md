@@ -19,6 +19,3 @@ To do:
 - unique civilization tech/units utilization
 - build a navy
 - defend feudal/castle rushes more effectively
-
-v.17.124
-- github readme updated with information
