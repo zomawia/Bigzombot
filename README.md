@@ -4,6 +4,8 @@ Bigzombot is a custom AI for Age of Empires 2 HD Edition.
 
 It works best with civilizations that have paladins (Franks, Persians, Huns, etc.) though it will probably work ok with most. Bigzombot will try to use counter units as well. Currently it will make a calvary-based army and attack in the Imperial age when it has enough military units. It does not cheat.
 
+Put in: Steam\steamapps\common\Age2HD\resources\_common\ai
+
 Map settings:
 - 200+ population
 - Land maps
