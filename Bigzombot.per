@@ -860,7 +860,6 @@
 )
 
 (defrule
-	(research-completed ri-chain-barding)
 	(can-research ri-iron-casting)
 =>
 	(research ri-iron-casting)
@@ -870,7 +869,7 @@
 (defrule
 	(current-age == castle-age)
 	(building-type-count-total stable > 0)
-	(unit-type-count-total knight-line < 9)
+	(unit-type-count-total knight-line <= 9)
 =>
 	(train knight-line)
 )
@@ -892,15 +891,15 @@
 	(gold-amount > 100)
 	(wood-amount > 100)
 	(unit-type-count-total 900 > 8)
-=>	
-	(research ri-leather-archer-armor)
+=>		
 	(research ri-ballistics)
 	(research ri-bodkin-arrow)
+	(research ri-leather-archer-armor)
 
 )
 
 (defrule	
-	(unit-type-count-total skirmisher-line > 10)
+	(unit-type-count-total skirmisher-line > 6)
 	(can-research ri-elite-skirmisher)
 =>
 	(research ri-elite-skirmisher)
@@ -977,6 +976,8 @@
 	(building-type-count-total castle > 0)
 =>
 	(set-strategic-number sn-percent-civilian-builders 25)
+	(set-strategic-number sn-cap-civilian-builders 10)
+	(set-strategic-number sn-allow-civilian-defense 1)
 )
 
 
