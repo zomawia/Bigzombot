@@ -1,10 +1,12 @@
 ;Bigzombot by Bigzom25
 ;AI for Age of Empires 2: HD edition
 
+; 
+
 ;Settings
 ; Pop - 200
 ; Civ - Franks or a civ with paladins
-; Map - land, no nomad, no water emphasis
+; Map - land map
 
 ;Defconsts
 (defconst ri-chivalry 493)	; Franks
@@ -191,7 +193,7 @@
 	(disable-timer restart-tsa)
 	(enable-timer restart-tsa tsa-time)
 	(set-strategic-number sn-maximum-town-size 30)
-	(chat-to-all "Restarting TSA")
+	;(chat-to-all "Restarting TSA")
 )
 
 ; ============= Attacking ===================
@@ -203,7 +205,7 @@
 =>
 	(set-goal attack-goal attacking-now)
 	(enable-timer restart-tsa 5)
-	(chat-to-all "Attacking now")
+	;(chat-to-all "Attacking now")
 )
 
 (defrule
@@ -214,7 +216,7 @@
 	(set-goal attack-goal retreating-now)
 	(disable-timer restart-tsa)
 	(set-strategic-number sn-maximum-town-size 28)
-	(chat-to-all "Retreating, sustained heavy casualties")
+	;(chat-to-all "Retreating, sustained heavy casualties")
 )
 
 ;===If Nomad map
@@ -224,7 +226,6 @@
 	(can-build town-center)
 =>
 	(build town-center)
-	(disable-self)
 )
 
 ;Dodging projectiles
@@ -242,7 +243,7 @@
 	(set-strategic-number sn-attack-group-size-randomness 0)
 	(set-strategic-number sn-ignore-attack-group-under-attack 0)
 	(set-strategic-number sn-minimum-attack-group-size 15)
-	(set-strategic-number sn-maximum-attack-group-size 60)
+	(set-strategic-number sn-maximum-attack-group-size 50)
 	(set-strategic-number sn-group-form-distance 40)
 	(set-strategic-number sn-group-commander-selection-method 0)
 	(set-strategic-number sn-group-leader-defense-distance 3)
@@ -305,8 +306,6 @@
 	(set-strategic-number sn-minimum-dropsite-buffer 30)
 	(set-strategic-number sn-random-placement-factor 0)
 	(set-strategic-number sn-minimum-town-size 1)
-	(set-strategic-number sn-mill-max-distance 100)
-	(set-strategic-number sn-camp-max-distance 100)
 	(disable-self)
 ) 
 
@@ -328,12 +327,10 @@
 (defrule
 	(true)
 =>
-	;(set-strategic-number sn-percent-civilian-explorers 66)
 	(set-strategic-number sn-percent-civilian-builders 30)
 	(set-strategic-number sn-percent-civilian-gatherers 90)
 	(set-strategic-number sn-cap-civilian-explorers 0)
 	(set-strategic-number sn-cap-civilian-builders 3)
-	(set-strategic-number sn-cap-civilian-gatherers 100)
 	(disable-self)
 ) 
 
@@ -592,7 +589,7 @@
 (defrule
 	(current-age == dark-age)
 	(research-completed ri-loom)
-	(civilian-population < 22)
+	(civilian-population < 21)
 	(can-train villager)
 =>
 	(train villager)
@@ -602,16 +599,16 @@
 	(current-age == dark-age)
 	(civilian-population >= 19)
 =>
-	(set-strategic-number sn-wood-gatherer-percentage 30)
-	(set-strategic-number sn-food-gatherer-percentage 65)
+	(set-strategic-number sn-wood-gatherer-percentage 35)
+	(set-strategic-number sn-food-gatherer-percentage 55)
 	(set-strategic-number sn-gold-gatherer-percentage 5)
-	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(set-strategic-number sn-stone-gatherer-percentage 5)
 	(disable-self)
 )
 
 ;Advance to feudal age
 (defrule
-	(current-age == dark-age)
+	(can-research dark-age)
 	(civilian-population >= 22)
 =>
 	(research feudal-age)
@@ -652,7 +649,7 @@
 ;Train a villager
 (defrule
 	(current-age == feudal-age)
-	(civilian-population < 32)
+	(civilian-population < 31)
 	(can-train villager)
 =>
 	(train villager)
@@ -798,14 +795,6 @@
 	(research ri-scale-mail)
 )
 
-
-
-(defrule
-	(can-research ri-iron-casting)
-=>
-	(research ri-iron-casting)
-)
-
 (defrule
 	(can-research ri-blast-furnace)
 =>
@@ -819,8 +808,14 @@
 )
 
 (defrule
+	(can-research ri-gold-mining)
+=>
+	(research ri-gold-mining)
+)
+
+(defrule
 	(players-unit-type-count any-enemy archer-line > 6)
-	(unit-type-count-total skirmisher-line < 12)
+	(unit-type-count-total 900 < 12)
 	(building-type-count-total archery-range <= 1)
 	
 =>
@@ -830,20 +825,6 @@
 	(build archery-range)
 	
 )
-
-;get archer upgrades if more than one archery-range
-(defrule
-	(current-age >= feudal-age)
-	(food-amount > 100)
-	(gold-amount > 100)
-	(wood-amount > 100)
-	(building-type-count-total archery-range > 1)
-=>
-	(research ri-ballistics)
-	(research ri-bodkin-arrow)
-	(research ri-padded-archer-armor)
-	(research ri-leather-archer-armor)
-)
 ;========================================================================
 ;=============================Castle Age rules=============================
 ;========================================================================
@@ -851,12 +832,24 @@
 (defrule
 	(current-age == castle-age)
 =>
-	(set-strategic-number sn-wood-gatherer-percentage 30)
-	(set-strategic-number sn-food-gatherer-percentage 45)
-	(set-strategic-number sn-gold-gatherer-percentage 15)
+	(set-strategic-number sn-wood-gatherer-percentage 26)
+	(set-strategic-number sn-food-gatherer-percentage 48)
+	(set-strategic-number sn-gold-gatherer-percentage 16)
 	(set-strategic-number sn-stone-gatherer-percentage 10)
 	(set-strategic-number sn-cap-civilian-builders 6)
 	(disable-self)
+)
+
+(defrule
+	(can-research ri-chain-barding)
+=>
+	(research ri-chain-barding)
+)
+
+(defrule
+	(can-research ri-iron-casting)
+=>
+	(research ri-iron-casting)
 )
 
 ;10 knights for mainly defense
@@ -876,6 +869,20 @@
 =>
 	(train skirmisher-line)
 	(build archery-range)
+)
+
+;get archer upgrades if more than one archery-range
+(defrule
+	(current-age >= castle-age)
+	(food-amount > 100)
+	(gold-amount > 100)
+	(wood-amount > 100)
+	(unit-type-count-total 900 > 8)
+=>	
+	(research ri-leather-archer-armor)
+	(research ri-ballistics)
+	(research ri-bodkin-arrow)
+
 )
 
 (defrule	
@@ -1049,18 +1056,10 @@
 	(research ri-ballistics)
 )
 
-(defrule
-	(current-age >= castle-age)
-	(unit-type-count 906 > 8)
-	(can-research ri-chain-barding)
-=>
-	(research ri-chain-barding)
-)
-
 ;if they knight rush
 (defrule
 	(current-age >= castle-age)
-	(players-unit-type-count any-enemy knight-line > 8)
+	(players-unit-type-count any-enemy 912 > 8)
 	(building-type-count-total barracks < 3)
 	(unit-type-count-total spearman-line < 16)
 =>	
@@ -1161,49 +1160,17 @@
 =>
 	(train militiaman-line)	
 )
+
+(defrule
+	(current-age >= castle-age)
+	(can-research ri-heresy)
+	(research-completed ri-paladin)
+=>	
+	(research ri-heresy)
+)
 ;========================================================================
 ;===========================Imperial Age rules=============================
 ;========================================================================
-
-(defrule	
-	(can-research ri-cavalier)
-=>
-	(research ri-cavalier)
-)
-
-(defrule
-	(can-research ri-paladin)
-=>	
-	(research ri-paladin)
-)
-
-(defrule
-	(current-age == imperial-age)	
-	(building-type-count-total stable < 2)
-=>
-	(build-forward stable)
-)
-
-(defrule
-	(can-research ri-chemistry)
-=>
-	(research ri-chemistry)
-)
-
-(defrule
-	(current-age == imperial-age)	
-	(building-type-count-total barracks < 3)
-=>
-	(build-forward barracks)
-)
-
-(defrule
-	(current-age == imperial-age)	
-	(building-type-count-total archery-range < 1)
-=>
-	(build-forward barracks)
-)
-
 
 (defrule
 	(current-age == imperial-age)
@@ -1251,22 +1218,54 @@
 	(train villager)
 )
 
+;Upgrade knights
+(defrule
+	(current-age == imperial-age)	
+	(building-type-count-total stable > 0)
+	(can-research ri-plate-barding)
+=>
+	(research ri-plate-barding)
+)
+
+(defrule	
+	(can-research ri-cavalier)
+=>
+	(research ri-cavalier)
+)
+
+(defrule
+	(can-research ri-paladin)
+=>	
+	(research ri-paladin)
+)
+
+(defrule
+	(current-age == imperial-age)	
+	(building-type-count-total stable < 2)
+=>
+	(build-forward stable)
+)
+
+(defrule
+	(can-research ri-chemistry)
+=>
+	(research ri-chemistry)
+)
+
+(defrule
+	(current-age == imperial-age)	
+	(building-type-count-total barracks < 3)
+=>
+	(build-forward barracks)
+)
+
 ;conversion resistance
 (defrule
-	(current-age >= castle-age)
+	(current-age == imperial-age)
 	(can-research ri-faith)
 	(research-completed ri-paladin)
-	(building-type-count-total monastery > 0)
 =>
 	(research ri-faith)	
-)
-(defrule
-	(current-age >= castle-age)
-	(can-research ri-heresy)
-	(research-completed ri-paladin)
-	(building-type-count-total monastery > 0)
-=>	
-	(research ri-heresy)
 )
 
 (defrule
@@ -1280,8 +1279,8 @@
 ;hand cannonners
 (defrule
 	(can-train hand-cannoneer)
-	(players-unit-type-count any-enemy spearman-line > 5)
-	(unit-type-count-total hand-cannoneer < 16)
+	(players-unit-type-count any-enemy spearman-line > 12)
+	(unit-type-count-total hand-cannoneer < 18)
 =>
 	(train hand-cannoneer)
 
@@ -1295,30 +1294,21 @@
 	(food-amount > 200)
 	(gold-amount > 200)
 	(wood-amount > 200)
-=>
-	(research ri-fletching)
-	(research ri-bodkin-arrow)	
-	(research ri-hoardings)
-	(research ri-gold-mining)
+=>	
 	(research ri-gold-shaft-mining)
+	(research ri-hoardings)	
 	(research ri-conscription)
 	(research ri-stone-mining)
 	(research ri-treadmill-crane)
-	(research ri-town-patrol)
 	(research ri-masonry)
-	(research ri-padded-archer-armor)
-	(research ri-leather-archer-armor)
 )
 
-
-
-;Upgrade knights
 (defrule
 	(current-age == imperial-age)	
-	(building-type-count-total stable > 0)
-	(can-research ri-plate-barding)
+	(can-research ri-ring-archer-armor)
+	(unit-type-count-total 900 > 10)
 =>
-	(research ri-plate-barding)
+	(research ri-ring-archer-armor)
 )
 
 ;make 10 knights
@@ -1375,17 +1365,12 @@
 )
 
 ;elite axemen after paladin
-; faith resistant upgrades
+
 (defrule
 	(current-age == imperial-age)
 	(research-completed ri-paladin)
-	(building-type-count-total monastery < 2)
 =>	
-	(research ri-heresy)
-	(research ri-faith)
 	(research my-unique-unit-upgrade)
-	(build monastery)
-	
 )
 
 ; make axemen
@@ -1415,26 +1400,18 @@
 
 (defrule
 	(current-age == imperial-age)
-	(research-completed ri-halberdier)
-	(unit-type-count-total spearman-line < 15)
+	(players-unit-type-count any-enemy 912 > 12)
+	(unit-type-count-total spearman-line < 26)
 =>
 	(train spearman-line)
 )
 
-;if a lot of knights
-(defrule
-	(current-age == imperial-age)
-	(players-unit-type-count any-enemy knight-line > 15)
-	(unit-type-count-total spearman-line < 30)
-=>
-	(train spearman-line)
-)
 
 ;CHAMPIONS if lots of trash units
 (defrule
 	(current-age == imperial-age)
 	(research-completed ri-cavalier)
-	(unit-type-count-total militiaman-line > 6)
+	(unit-type-count-total spearman-line > 12)
 =>	
 	(research ri-two-handed-swordsman)
 	(research ri-champion)	
@@ -1442,11 +1419,8 @@
 
 (defrule
 	(current-age == imperial-age)
-	(unit-type-count-total knight-line > 6)
+	(unit-type-count-total knight-line > 12)
 	(unit-type-count-total militiaman-line < 12)
-;	(or (players-unit-type-count any-enemy skirmisher-line > 10)
-;		(or (players-unit-type-count any-enemy spearman-line > 10)))
-	
 =>
 	(train militiaman-line)
 )
@@ -1506,10 +1480,10 @@
 (defrule
 	(can-train bombard-cannon)
 	(players-unit-type-count any-enemy mangonel-line >= 2)
-	(unit-type-count-total bombard-cannon <= 5)
+	(unit-type-count-total bombard-cannon <= 4)
 	(can-train bombard-cannon)
 =>
-	(build bombard-cannon)	
+	(train bombard-cannon)	
 )
 
 ; Trade
