@@ -193,7 +193,7 @@
 	(disable-timer restart-tsa)
 	(enable-timer restart-tsa tsa-time)
 	(set-strategic-number sn-maximum-town-size 30)
-	;(chat-to-all "Restarting TSA")
+	(chat-local-to-self "Restarting TSA")
 )
 
 ; ============= Attacking ===================
@@ -205,7 +205,7 @@
 =>
 	(set-goal attack-goal attacking-now)
 	(enable-timer restart-tsa 5)
-	;(chat-to-all "Attacking now")
+	(chat-to-allies "Attacking now")
 )
 
 (defrule
@@ -216,7 +216,7 @@
 	(set-goal attack-goal retreating-now)
 	(disable-timer restart-tsa)
 	(set-strategic-number sn-maximum-town-size 28)
-	;(chat-to-all "Retreating, sustained heavy casualties")
+	(chat-to-allies "Retreating, sustained heavy casualties")
 )
 
 ;===If Nomad map
@@ -242,8 +242,8 @@
 =>
 	(set-strategic-number sn-attack-group-size-randomness 0)
 	(set-strategic-number sn-ignore-attack-group-under-attack 0)
-	(set-strategic-number sn-minimum-attack-group-size 15)
-	(set-strategic-number sn-maximum-attack-group-size 50)
+	(set-strategic-number sn-minimum-attack-group-size 10)
+	(set-strategic-number sn-maximum-attack-group-size 75)
 	(set-strategic-number sn-group-form-distance 40)
 	(set-strategic-number sn-group-commander-selection-method 0)
 	(set-strategic-number sn-group-leader-defense-distance 3)
@@ -273,6 +273,7 @@
 	(true)
 =>
 	(set-strategic-number sn-percent-enemy-sighted-response 100)
+	(set-strategic-number sn-enemy-sighted-response-distance 20)
 	(set-strategic-number sn-defend-overlap-distance 1)
 	(set-strategic-number sn-defense-distance 3)
 	(set-strategic-number sn-sentry-distance 9)
