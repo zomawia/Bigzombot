@@ -484,6 +484,7 @@
 
 ; WOOD AND FARM UPGRADES
 (defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(can-research ri-double-bit-axe)
 =>
 	(research ri-double-bit-axe)
@@ -502,6 +503,7 @@
 )
 
 (defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(can-research ri-horse-collar)
 =>
 	(research ri-horse-collar)
@@ -590,7 +592,7 @@
 (defrule
 	(current-age == dark-age)
 	(research-completed ri-loom)
-	(civilian-population < 21)
+	(civilian-population < 25)
 	(can-train villager)
 =>
 	(train villager)
@@ -610,7 +612,7 @@
 ;Advance to feudal age
 (defrule
 	(can-research feudal-age)
-	(civilian-population >= 21)
+	(civilian-population >= 25)
 =>
 	(research feudal-age)
 )
@@ -641,6 +643,7 @@
 
 ;Town Watch
 (defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(can-research ri-town-watch)
 	(civilian-population > 30)
 =>
@@ -661,7 +664,7 @@
 ;Wheelbarrow
 (defrule
 	(can-research ri-wheel-barrow)
-	(civilian-population > 28)
+	(civilian-population > 26)
 =>
 	(research ri-wheel-barrow)
 )
@@ -682,6 +685,7 @@
 )
 
 (defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(can-research ri-tracking)
 =>
 	(research ri-tracking)
@@ -709,7 +713,7 @@
 
 ;Advance to castle age
 (defrule
-	(current-age == feudal-age)
+	(current-age == feudal-age)	
 	(can-research castle-age)
 	(civilian-population >= 31)	
 =>
@@ -718,12 +722,14 @@
 
 ;Knight blacksmith upgrades
 (defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(can-research ri-scale-barding)
 =>
 	(research ri-scale-barding)	
 )
 
 (defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(research-completed ri-scale-barding)
 	(can-research ri-forging)
 =>
@@ -732,6 +738,7 @@
 
 ;first archer range
 (defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(current-age == feudal-age)
 	(building-type-count-total stable > 0)
 	(building-type-count-total archery-range == 0)	
@@ -763,6 +770,7 @@
 
 ;tradecarts
 (defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(current-age == feudal-age)
 	(players-building-type-count any-ally market != 0)
 	(unit-type-count-total trade-cart < 2)
@@ -779,6 +787,7 @@
 )
 
 (defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(current-age >= feudal-age)
 	(can-research ri-man-at-arms)
 =>
@@ -794,24 +803,28 @@
 )
 
 (defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(can-research ri-squires)
 =>
 	(research ri-squires)
 )
 
 (defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(can-research ri-gold-mining)
 =>
 	(research ri-gold-mining)
 )
 
 (defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(can-research ri-stone-mining)
 =>
 	(research ri-stone-mining)
 )
 
 (defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(players-unit-type-count any-enemy archer-line > 6)
 	(unit-type-count-total 900 < 12)
 	(building-type-count-total archery-range <= 1)
