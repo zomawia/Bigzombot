@@ -1440,9 +1440,17 @@
 (defrule
 	(current-age == imperial-age)
 	(research-completed ri-cavalier)
-	(or	(players-unit-type-count any-enemy spearman-line > 8)
-		(players-unit-type-count any-enemy skirmisher-line > 8)
-	)
+	(can-research ri-two-handed-swordsman)
+	(players-unit-type-count any-enemy spearman-line > 8)
+=>	
+	(research ri-two-handed-swordsman)
+)
+
+(defrule
+	(current-age == imperial-age)
+	(research-available ri-cavalier)
+	(can-research ri-two-handed-swordsman)
+	(players-unit-type-count any-enemy skirmisher-line > 8)
 =>	
 	(research ri-two-handed-swordsman)
 )
@@ -1456,6 +1464,7 @@
 
 (defrule
 	(current-age == imperial-age)
+	(research-completed ri-two-handed-swordsman)
 	(unit-type-count-total knight-line > 12)
 	(unit-type-count-total militiaman-line < 12)
 =>
@@ -1506,6 +1515,17 @@
 	(build-forward siege-workshop)
 )
 
+; War wagons I hate war wagons
+(defrule
+	(current-age == imperial-age)
+	(players-unit-type-count any-enemy war-wagon-line > 10)
+	(unit-type-count-total skirmisher-line < 15)
+	(unit-type-count-total spearman-line < 15)
+=>
+	(train skirmisher-line)
+	(train spearman-line)
+)
+
 (defrule
 	(building-type-count-total castle > 0)
 	(building-type-count-total siege-workshop > 0)
@@ -1526,7 +1546,7 @@
 ; Trade
 (defrule
 	(current-age == imperial-age)
-	(current-age-time >= 300)
+	(current-age-time >= 240)
 	(can-research ri-guilds)
 => 
 	(research ri-guilds)
