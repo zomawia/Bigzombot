@@ -69,7 +69,7 @@
 (defconst attacking-now 1)
 (defconst build-army 3)
 
-(defconst mil-pop-attack 50)
+(defconst mil-pop-attack 40)
 (defconst mil-pop-retreat 15)
 
 ; Timers
@@ -1130,6 +1130,7 @@
 
 ; BUILD FORWARD CASTLES
 (defrule
+	(goal attack-goal attacking-now)
 	(current-age >= castle-age)
 	(current-age-time > 240)
 	(building-type-count-total castle < 4)
@@ -1246,21 +1247,22 @@
 
 ;upgrade swordsman
 (defrule
-	(current-age-time >= 60)
+	(current-age >= castle-age)
 	(can-research ri-long-swordsman)
+	(unit-type-count-total militiaman-line > 5)
 =>
 	(research long-swordsman)
 )
 
 (defrule
-	(unit-type-count 906 > 8)
+	(unit-type-count 906 > 5)
 	(can-research ri-chain-mail)
 =>
 	(research ri-chain-mail)
 )
 
 (defrule
-	(current-age == castle-age)
+	(current-age >= castle-age)
 	(players-unit-type-count any-enemy eagle-warrior-line > 6)
 	(unit-type-count-total militiaman-line < 8)
 =>
@@ -1522,14 +1524,11 @@
 	(train spearman-line)
 )
 
-
-;CHAMPIONS if lots of trash units
 (defrule
-	(current-age == imperial-age)
-	(research-completed ri-cavalier)
 	(can-research ri-two-handed-swordsman)
-	(players-unit-type-count any-enemy spearman-line > 8)
-=>	
+	(research-completed ri-cavalier)
+	(unit-type-count-total militiaman-line > 6)
+=>
 	(research ri-two-handed-swordsman)
 )
 
@@ -1541,8 +1540,6 @@
 =>	
 	(research ri-champion)
 )
-
-
 
 (defrule
 	(research-completed ri-paladin)
@@ -1556,6 +1553,14 @@
 	(research-completed ri-two-handed-swordsman)
 	(unit-type-count-total knight-line > 12)
 	(unit-type-count-total militiaman-line < 12)
+=>
+	(train militiaman-line)
+)
+
+(defrule
+	(current-age == imperial-age)
+	(players-unit-type-count any-enemy eagle-warrior-line > 10)
+	(unit-type-count-total militiaman-line < 10)
 =>
 	(train militiaman-line)
 )
@@ -1609,18 +1614,18 @@
 	(can-train camel-line)
 	(unit-type-count-total camel-line < 10)
 	(players-unit-type-count any-enemy knight-line > 10)
-	=>
+=>
 	(train camel-line)
 )
 
 (defrule
 	(can-research ri-heavy-camel)
-	=>
+=>
 	(research ri-heavy-camel)
 )
 
 
-; War wagons I hate war wagons
+; trash to fight War wagons I hate war wagons
 (defrule
 	(current-age == imperial-age)
 	(players-unit-type-count any-enemy war-wagon-line > 10)
