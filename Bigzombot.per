@@ -15,7 +15,7 @@
 (defconst ri-treadmill-crane 54)
 
 (defrule
-	(true)
+	(current-age-time > 10)
 =>
 	(chat-to-all "29: I am Bigzombot")
 	(disable-self)
@@ -156,7 +156,7 @@
 
 (defrule
   (goal attack-goal attacking-now)
-  (strategic-number sn-maximum-town-size == 90)
+  (strategic-number sn-maximum-town-size == 100)
   (not (enemy-buildings-in-town))
 =>
   (set-strategic-number sn-maximum-town-size 110)
@@ -164,7 +164,15 @@
 
 (defrule
   (goal attack-goal attacking-now)
-  (strategic-number sn-maximum-town-size == 70)
+  (strategic-number sn-maximum-town-size == 90)
+  (not (enemy-buildings-in-town))
+=>
+  (set-strategic-number sn-maximum-town-size 100)
+)
+
+(defrule
+  (goal attack-goal attacking-now)
+  (strategic-number sn-maximum-town-size == 85)
   (not (enemy-buildings-in-town))
 =>
   (set-strategic-number sn-maximum-town-size 90)
@@ -172,7 +180,31 @@
 
 (defrule
   (goal attack-goal attacking-now)
-  (strategic-number sn-maximum-town-size == 50)
+  (strategic-number sn-maximum-town-size == 80)
+  (not (enemy-buildings-in-town))
+=>
+  (set-strategic-number sn-maximum-town-size 85)
+)
+
+(defrule
+  (goal attack-goal attacking-now)
+  (strategic-number sn-maximum-town-size == 75)
+  (not (enemy-buildings-in-town))
+=>
+  (set-strategic-number sn-maximum-town-size 80)
+)
+
+(defrule
+  (goal attack-goal attacking-now)
+  (strategic-number sn-maximum-town-size == 70)
+  (not (enemy-buildings-in-town))
+=>
+  (set-strategic-number sn-maximum-town-size 75)
+)
+
+(defrule
+  (goal attack-goal attacking-now)
+  (strategic-number sn-maximum-town-size == 64)
   (not (enemy-buildings-in-town))
 =>
   (set-strategic-number sn-maximum-town-size 70)
@@ -180,10 +212,58 @@
 
 (defrule
   (goal attack-goal attacking-now)
-  (strategic-number sn-maximum-town-size == 30)
+  (strategic-number sn-maximum-town-size == 60)
   (not (enemy-buildings-in-town))
 =>
-  (set-strategic-number sn-maximum-town-size 50)
+  (set-strategic-number sn-maximum-town-size 64)
+)
+
+(defrule
+  (goal attack-goal attacking-now)
+  (strategic-number sn-maximum-town-size == 56)
+  (not (enemy-buildings-in-town))
+=>
+  (set-strategic-number sn-maximum-town-size 60)
+)
+
+(defrule
+  (goal attack-goal attacking-now)
+  (strategic-number sn-maximum-town-size == 52)
+  (not (enemy-buildings-in-town))
+=>
+  (set-strategic-number sn-maximum-town-size 56)
+)
+
+(defrule
+  (goal attack-goal attacking-now)
+  (strategic-number sn-maximum-town-size == 48)
+  (not (enemy-buildings-in-town))
+=>
+  (set-strategic-number sn-maximum-town-size 52)
+)
+
+(defrule
+  (goal attack-goal attacking-now)
+  (strategic-number sn-maximum-town-size == 44)
+  (not (enemy-buildings-in-town))
+=>
+  (set-strategic-number sn-maximum-town-size 48)
+)
+
+(defrule
+  (goal attack-goal attacking-now)
+  (strategic-number sn-maximum-town-size == 40)
+  (not (enemy-buildings-in-town))
+=>
+  (set-strategic-number sn-maximum-town-size 44)
+)
+
+(defrule
+  (goal attack-goal attacking-now)
+  (strategic-number sn-maximum-town-size == 36)
+  (not (enemy-buildings-in-town))
+=>
+  (set-strategic-number sn-maximum-town-size 40)
 )
 
 (defrule
@@ -192,7 +272,7 @@
 =>
 	(disable-timer restart-tsa)
 	(enable-timer restart-tsa tsa-time)
-	(set-strategic-number sn-maximum-town-size 30)
+	(set-strategic-number sn-maximum-town-size 36)
 	(chat-local-to-self "Restarting TSA")
 )
 
@@ -228,12 +308,17 @@
 	(build town-center)
 )
 
-;Dodging projectiles
+;; setup default stuff
+
 (defrule
 	(true)
 =>
 	(set-difficulty-parameter ability-to-maintain-distance 80)
 	(set-difficulty-parameter ability-to-dodge-missiles 80)
+	(set-strategic-number sn-attack-winning-player 1)
+	(set-strategic-number sn-attack-winning-player-factor -100)
+	(set-strategic-number sn-number-build-attempts-before-skip 3)
+	(set-strategic-number sn-percentage-explore-exterminators 0)
 	(disable-self)
 )
 
@@ -254,14 +339,14 @@
 (defrule
 	(true)
 =>
-	(set-strategic-number sn-target-evaluation-siege-weapon 500)
-	(set-strategic-number sn-target-evaluation-damage-capability 1)
-	(set-strategic-number sn-target-evaluation-in-progress 0)
+	(set-strategic-number sn-target-evaluation-siege-weapon 250)
+	(set-strategic-number sn-target-evaluation-damage-capability 80)
+	(set-strategic-number sn-target-evaluation-in-progress 60)
 	(set-strategic-number sn-target-evaluation-distance 100)
-	(set-strategic-number sn-target-evaluation-hitpoints 0)
+	(set-strategic-number sn-target-evaluation-hitpoints 90)
 	(set-strategic-number sn-target-evaluation-range 0)
-	(set-strategic-number sn-target-evaluation-rof 0)
-	(set-strategic-number sn-target-evaluation-time-kill-ratio 1)
+	(set-strategic-number sn-target-evaluation-rof 25)
+	(set-strategic-number sn-target-evaluation-time-kill-ratio 70)
 	(set-strategic-number sn-target-evaluation-attack-attempts 0)
 	(set-strategic-number sn-target-evaluation-ally-proximity 0)
 	(set-strategic-number sn-target-evaluation-randomness 0)
@@ -332,6 +417,7 @@
 	(set-strategic-number sn-percent-civilian-gatherers 90)
 	(set-strategic-number sn-cap-civilian-explorers 0)
 	(set-strategic-number sn-cap-civilian-builders 3)
+	(set-strategic-number sn-intelligent-gathering 1)
 	(disable-self)
 ) 
 
@@ -848,6 +934,7 @@
 	(set-strategic-number sn-gold-gatherer-percentage 16)
 	(set-strategic-number sn-stone-gatherer-percentage 10)
 	(set-strategic-number sn-cap-civilian-builders 7)
+	(set-strategic-number sn-percentage-explore-exterminators 5)
 	(disable-self)
 )
 
@@ -1448,12 +1535,14 @@
 
 (defrule
 	(current-age == imperial-age)
-	(research-available ri-cavalier)
-	(can-research ri-two-handed-swordsman)
-	(players-unit-type-count any-enemy skirmisher-line > 8)
+	(can-research ri-champion)
+	(players-unit-type-count any-enemy skirmisher-line > 9)
+	(players-unit-type-count any-enemy spearman-line > 9)
 =>	
-	(research ri-two-handed-swordsman)
+	(research ri-champion)
 )
+
+
 
 (defrule
 	(research-completed ri-paladin)
@@ -1514,6 +1603,22 @@
 =>
 	(build-forward siege-workshop)
 )
+
+; Camels if knights
+(defrule
+	(can-train camel-line)
+	(unit-type-count-total camel-line < 10)
+	(players-unit-type-count any-enemy knight-line > 10)
+	=>
+	(train camel-line)
+)
+
+(defrule
+	(can-research ri-heavy-camel)
+	=>
+	(research ri-heavy-camel)
+)
+
 
 ; War wagons I hate war wagons
 (defrule
