@@ -317,7 +317,7 @@
 	(set-difficulty-parameter ability-to-dodge-missiles 80)
 	(set-strategic-number sn-attack-winning-player 1)
 	(set-strategic-number sn-attack-winning-player-factor -100)
-	(set-strategic-number sn-number-build-attempts-before-skip 3)
+	;(set-strategic-number sn-number-build-attempts-before-skip 3)
 	(set-strategic-number sn-percentage-explore-exterminators 0)
 	(disable-self)
 )
@@ -1468,7 +1468,7 @@
 
 (defrule
 	(current-age == imperial-age)
-	(building-type-count-total stable < 5)
+	(building-type-count-total stable < 4)
 =>
 	(build stable)
 )
