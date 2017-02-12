@@ -17,7 +17,7 @@
 (defrule
 	(current-age-time > 10)
 =>
-	(chat-to-all "29: I am Bigzombot")
+	(chat-to-all "29: its me Bigzombot")
 	(disable-self)
 )
 
@@ -359,9 +359,9 @@
 =>
 	(set-strategic-number sn-percent-enemy-sighted-response 100)
 	(set-strategic-number sn-enemy-sighted-response-distance 20)
-	(set-strategic-number sn-defend-overlap-distance 1)
-	(set-strategic-number sn-defense-distance 3)
-	(set-strategic-number sn-sentry-distance 9)
+	(set-strategic-number sn-defend-overlap-distance 2)
+	(set-strategic-number sn-defense-distance 2)
+	(set-strategic-number sn-sentry-distance 7)
 	(set-strategic-number sn-sentry-distance-variation 2)
 	(set-strategic-number sn-gather-defense-units 1)
 	(set-strategic-number sn-minimum-water-body-size-for-dock 500)
@@ -577,12 +577,14 @@
 )
 
 (defrule
+	(current-age >= castle-age)
 	(can-research ri-bow-saw)
 =>
 	(research ri-bow-saw)
 )
 
 (defrule
+	(current-age == imperial-age)
 	(can-research ri-two-man-saw)
 =>
 	(research ri-two-man-saw)
@@ -596,12 +598,14 @@
 )
 
 (defrule
-	(can-research ri-crop-rotation)
+	(current-age >= castle-age)
+	(can-research ri-heavy-plow)
 =>
-	(research ri-crop-rotation)
+	(research ri-heavy-plow)
 )
 
 (defrule
+	(current-age == imperial-age)
 	(can-research ri-crop-rotation)
 =>
 	(research ri-crop-rotation)
@@ -718,12 +722,21 @@
 (defrule
 	(current-age == feudal-age)
 =>
-	(set-strategic-number sn-wood-gatherer-percentage 45)
-	(set-strategic-number sn-food-gatherer-percentage 40)
+	(set-strategic-number sn-wood-gatherer-percentage 39)
+	(set-strategic-number sn-food-gatherer-percentage 43)
 	(set-strategic-number sn-gold-gatherer-percentage 10)
-	(set-strategic-number sn-stone-gatherer-percentage 5)
+	(set-strategic-number sn-stone-gatherer-percentage 8)
 	(set-strategic-number sn-cap-civilian-builders 4)
 	(set-strategic-number sn-percent-civilian-gatherers 90)
+	(disable-self)
+)
+
+;switch to more balanced after researching castle
+(defrule
+	(up-research-status c: castle-age >= research-pending) 
+=>
+	(set-strategic-number sn-wood-gatherer-percentage 35)
+	(set-strategic-number sn-food-gatherer-percentage 45)
 	(disable-self)
 )
 
@@ -739,7 +752,7 @@
 ;Train a villager
 (defrule
 	(current-age == feudal-age)
-	(civilian-population < 31)
+	(civilian-population < 30)
 	(can-train villager)
 =>
 	(train villager)
@@ -787,21 +800,11 @@
 	(up-drop-resources food c: 3) ;Drop the food
 )
 
-;drop gold if close to castle-age tech
-(defrule
-	(research-available castle-age)
-	(gold-amount < 200)
-	(food-amount >= 800)
-	(gold-amount >= 150)
-=>
-	(up-drop-resources gold c: 3) ;Drop the gold
-)
-
 ;Advance to castle age
 (defrule
 	(current-age == feudal-age)	
 	(can-research castle-age)
-	(civilian-population >= 31)	
+	(civilian-population >= 30)	
 =>
 	(research castle-age)	
 )
@@ -911,6 +914,13 @@
 
 (defrule
 	(up-research-status c: castle-age >= research-pending) 
+	(can-research ri-bloodlines)
+=>
+	(research ri-bloodlines)
+)
+
+(defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(players-unit-type-count any-enemy archer-line > 6)
 	(unit-type-count-total 900 < 12)
 	(building-type-count-total archery-range <= 1)
@@ -930,11 +940,12 @@
 	(current-age == castle-age)
 =>
 	(set-strategic-number sn-wood-gatherer-percentage 30)
-	(set-strategic-number sn-food-gatherer-percentage 44)
-	(set-strategic-number sn-gold-gatherer-percentage 16)
+	(set-strategic-number sn-food-gatherer-percentage 50)
+	(set-strategic-number sn-gold-gatherer-percentage 10)
 	(set-strategic-number sn-stone-gatherer-percentage 10)
 	(set-strategic-number sn-cap-civilian-builders 7)
 	(set-strategic-number sn-percentage-explore-exterminators 5)
+	(set-strategic-number sn-maximum-hunt-drop-distance 12)
 	(disable-self)
 )
 
@@ -955,22 +966,24 @@
 )
 
 (defrule
+	(current-age >= castle-age)
 	(can-research ri-chain-barding)
 =>
 	(research ri-chain-barding)
 )
 
 (defrule
+	(current-age >= castle-age)
 	(can-research ri-iron-casting)
 =>
 	(research ri-iron-casting)
 )
 
-;10 knights for mainly defense
+;some knights for mainly defense
 (defrule
 	(current-age == castle-age)
 	(building-type-count-total stable > 0)
-	(unit-type-count-total knight-line <= 9)
+	(unit-type-count-total knight-line < 11)
 =>
 	(train knight-line)
 )
@@ -1008,12 +1021,7 @@
 )
 
 (defrule
-	(can-research ri-bloodlines)
-=>
-	(research ri-bloodlines)
-)
-
-(defrule
+	(current-age >= castle-age)
 	(can-research ri-husbandry)
 =>
 	(research ri-husbandry)
@@ -1021,6 +1029,7 @@
 
 ;crossbow after 2 mins
 (defrule
+	(current-age >= castle-age)
 	(can-research ri-crossbow)
 	(current-age-time > 120)
 =>
@@ -1029,6 +1038,8 @@
 
 ;monastery
 (defrule
+	(current-age >= castle-age)
+	(can-build monastery)
 	(building-type-count-total monastery == 0)
 =>
 	(build monastery)
@@ -1116,6 +1127,7 @@
 )
 
 (defrule
+	(current-age >= castle-age)
 	(can-research ri-hand-cart)
 =>
 	(research ri-hand-cart)
@@ -1172,13 +1184,8 @@
 ;if they knight rush
 (defrule
 	(current-age >= castle-age)
-	(players-unit-type-count any-enemy 912 > 8)
-	(building-type-count-total barracks < 3)
-	(unit-type-count-total spearman-line < 16)
 =>	
-	(build barracks)
-	(research ri-pikeman)	
-	(train spearman-line)
+	(research ri-pikeman)		
 )
 
 ;start upping/training axemen if enemy has pikemen
@@ -1200,9 +1207,11 @@
 )
 
 (defrule
-	(unit-type-count-total archer-line < 8)
+	(current-age == castle-age)
+	(can-train archer-line)
+	(unit-type-count-total archer-line < 7)
 =>
-	(build archer-line)
+	(train archer-line)
 )
 
 ;research and build light calvary if see monks
@@ -1284,7 +1293,7 @@
 =>
 	; These strategic numbers set how many villagers are assigned to each resource:
 	(set-strategic-number sn-camp-max-distance 80) ; Max. distance lumber / mining camps to town center
-	(set-strategic-number sn-maximum-hunt-drop-distance 42) ; Max. dist. from town that hunters walk to animals
+	(set-strategic-number sn-maximum-hunt-drop-distance 10) ; Max. dist. from town that hunters walk to animals
 	(set-strategic-number sn-maximum-town-size 30)
 	(disable-self)
 )
@@ -1389,7 +1398,7 @@
 (defrule
 	(current-age == imperial-age)
 	(players-building-type-count any-ally market != 0)
-	(unit-type-count-total trade-cart < 11)
+	(unit-type-count-total trade-cart < 10)
 =>
 	(train trade-cart)
 )
@@ -1398,7 +1407,7 @@
 (defrule
 	(can-train hand-cannoneer)
 	(players-unit-type-count any-enemy spearman-line > 12)
-	(unit-type-count-total hand-cannoneer < 18)
+	(unit-type-count-total hand-cannoneer < 12)
 =>
 	(train hand-cannoneer)
 
@@ -1452,9 +1461,8 @@
 ;make more knights after getting cavalier/paladin
 (defrule
 	(current-age == imperial-age)
-	(building-type-count-total stable > 1)
 	(research-completed ri-paladin)
-	(unit-type-count-total knight-line < 74)
+	(unit-type-count-total knight-line < 70)
 =>
 	(train knight-line)
 )
@@ -1493,8 +1501,7 @@
 
 ; make axemen
 (defrule
-	(current-age == imperial-age)
-	(players-unit-type-count any-enemy spearman-line > 10)	
+	(current-age == imperial-age)	
 	(unit-type-count-total my-unique-unit-line < 15)			
 =>	
 	(train my-unique-unit-line)
@@ -1512,7 +1519,6 @@
 	(current-age == imperial-age)
 	(research-completed ri-cavalier)	
 =>
-	(research ri-pikeman)
 	(research ri-halberdier)
 )
 
@@ -1527,7 +1533,7 @@
 (defrule
 	(can-research ri-two-handed-swordsman)
 	(research-completed ri-cavalier)
-	(unit-type-count-total militiaman-line > 6)
+	(unit-type-count-total militiaman-line > 5)
 =>
 	(research ri-two-handed-swordsman)
 )
@@ -1543,6 +1549,7 @@
 
 (defrule
 	(research-completed ri-paladin)
+	(can-research ri-champion)
 	(unit-type-count-total militiaman-line > 8)
 =>
 	(research ri-champion)
@@ -1662,6 +1669,14 @@
 	(research ri-guilds)
 )
 
+(defrule
+	(current-age == imperial-age)
+	(players-unit-type-count any-enemy 912 > 19)
+	(unit-type-count-total spearman-line < 25)
+=>
+	(train spearman-line)
+)
+
 ;Make another market if there are a lot of trade carts
 (defrule
 	(building-type-count-total market == 1)
@@ -1673,7 +1688,8 @@
 
 ;sell wood at market late game
 (defrule
-	(current-age-time >= 300)
+	(current-age == imperial-age)
+	(current-age-time >= 500)
 	(unit-type-count villager >= 20)
 	(wood-amount >= 1000)
 	(can-sell-commodity wood)
@@ -1683,7 +1699,8 @@
 
 ;sell food at market late game
 (defrule
-	(current-age-time >= 300)
+	(current-age == imperial-age)
+	(current-age-time >= 500)
 	(unit-type-count villager >= 20)
 	(food-amount >= 1500)
 	(can-sell-commodity food)
@@ -1693,7 +1710,8 @@
 
 ;buy food at market late game
 (defrule
-	(current-age-time >= 300)
+	(current-age == imperial-age)
+	(current-age-time >= 500)
 	(unit-type-count villager >= 20)
 	(food-amount <= 500)
 	(gold-amount >= 1000)
@@ -1706,6 +1724,7 @@
 
 ;sell stone at market late game
 (defrule
+	(current-age == imperial-age)
 	(current-age-time >= 300)
 	(unit-type-count villager >= 20)
 	(gold-amount < 500)
