@@ -706,10 +706,20 @@
 =>
 	(research feudal-age)
 )
-
-;build first barracks
 (defrule
-	(building-type-count-total barracks < 1)
+	(up-research-status c: feudal-age == research-pending) 
+=>
+	(set-strategic-number sn-wood-gatherer-percentage 45)
+	(set-strategic-number sn-food-gatherer-percentage 40)
+	(set-strategic-number sn-gold-gatherer-percentage 10)
+	(set-strategic-number sn-stone-gatherer-percentage 5)
+	(disable-self)
+)
+
+
+;build barracks
+(defrule
+	(building-type-count-total barracks == 0)
 	(building-type-count-total lumber-camp > 0)
 	(building-type-count-total mill > 0)
 =>	
@@ -722,12 +732,11 @@
 (defrule
 	(current-age == feudal-age)
 =>
-	(set-strategic-number sn-wood-gatherer-percentage 39)
-	(set-strategic-number sn-food-gatherer-percentage 43)
+	(set-strategic-number sn-wood-gatherer-percentage 40)
+	(set-strategic-number sn-food-gatherer-percentage 42)
 	(set-strategic-number sn-gold-gatherer-percentage 10)
 	(set-strategic-number sn-stone-gatherer-percentage 8)
 	(set-strategic-number sn-cap-civilian-builders 4)
-	(set-strategic-number sn-percent-civilian-gatherers 90)
 	(disable-self)
 )
 
@@ -758,10 +767,9 @@
 	(train villager)
 )
 
-
-
 ;Wheelbarrow
 (defrule
+	(up-research-status c: castle-age >= research-pending) 
 	(can-research ri-wheel-barrow)
 	(civilian-population > 26)
 =>
@@ -949,6 +957,15 @@
 	(disable-self)
 )
 
+;2 more town center
+(defrule
+	(current-age >= castle-age)
+	(building-type-count-total town-center <= 2)
+=>
+	(build town-center)
+)
+
+
 ;make the castle
 (defrule	
 	(building-type-count-total town-center > 0)	
@@ -1110,14 +1127,6 @@
 	(train villager)
 )
 
-;2 more town center
-(defrule
-	(current-age >= castle-age)
-	(building-type-count-total town-center <= 2)
-=>
-	(build town-center)
-)
-
 ;stables
 (defrule
 	(current-age == castle-age)
@@ -1231,7 +1240,7 @@
 ;advance to imperial-age
 (defrule
 	(can-research imperial-age)
-	(civilian-population >= 50)
+	;(civilian-population >= 50)
 =>
 	(research imperial-age)
 )
@@ -1688,7 +1697,7 @@
 
 ;sell wood at market late game
 (defrule
-	(current-age == imperial-age)
+	(current-age >= castle-age)
 	(current-age-time >= 500)
 	(unit-type-count villager >= 20)
 	(wood-amount >= 1000)
@@ -1699,7 +1708,7 @@
 
 ;sell food at market late game
 (defrule
-	(current-age == imperial-age)
+	(current-age >= castle-age)
 	(current-age-time >= 500)
 	(unit-type-count villager >= 20)
 	(food-amount >= 1500)
