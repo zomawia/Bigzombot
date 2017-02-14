@@ -670,6 +670,17 @@
 	(train villager)
 )
 
+(defrule
+	(current-age == dark-age)
+	(civilian-population >= 7)
+=>
+	(set-strategic-number sn-wood-gatherer-percentage 15)
+	(set-strategic-number sn-food-gatherer-percentage 85)
+	(set-strategic-number sn-gold-gatherer-percentage 0)
+	(set-strategic-number sn-stone-gatherer-percentage 0)
+	(disable-self)
+)
+
 ;stop at 11 villagers to get loom
 (defrule
 	(can-research ri-loom)
